@@ -1,7 +1,6 @@
 use serde::Deserialize;
 use serde_repr::Deserialize_repr;
-use std::ffi::OsString;
-#[derive(Deserialize, Clone, Copy, PartialEq, Eq, Hash)]
+#[derive(Deserialize, Clone, Copy, PartialEq, Eq, Hash, Debug)]
 pub struct Rect {
     pub(crate) x: i64,
     pub(crate) y: i64,
@@ -9,24 +8,24 @@ pub struct Rect {
     pub(crate) height: i64,
 }
 
-#[derive(Deserialize, Clone, PartialEq)]
+#[derive(Deserialize, Clone, PartialEq, Debug)]
 pub struct Workspace {
     pub(crate) num: i64,
-    pub(crate) name: OsString,
+    pub(crate) name: String,
     pub(crate) visible: bool,
     pub(crate) focused: bool,
     pub(crate) urgent: bool,
     pub(crate) rect: Rect,
-    pub(crate) output: OsString,
+    pub(crate) output: String,
 }
 
-#[derive(Deserialize, Clone)]
+#[derive(Deserialize, Clone, Debug)]
 pub struct CommandResult {
     pub success: bool,
     #[serde(default)]
     pub parse_error: Option<bool>,
     #[serde(default)]
-    pub error: Option<OsString>,
+    pub error: Option<String>,
 }
 
 #[repr(u32)]
@@ -45,6 +44,7 @@ pub enum EventType {
 
 #[derive(Clone, Copy, Deserialize, PartialEq, Eq, Hash)]
 #[serde(rename_all = "snake_case")]
+#[derive(Debug)]
 pub enum SwayNodeType {
     Root,
     Output,
@@ -54,6 +54,7 @@ pub enum SwayNodeType {
 }
 #[derive(Clone, Copy, Deserialize, PartialEq, Eq, Hash)]
 #[serde(rename_all = "lowercase")]
+#[derive(Debug)]
 pub enum SwayBorderStyle {
     Normal,
     None,
@@ -62,16 +63,20 @@ pub enum SwayBorderStyle {
 }
 #[derive(Clone, Copy, Deserialize, PartialEq, Eq, Hash)]
 #[serde(rename_all = "lowercase")]
+#[derive(Debug)]
 pub enum SwayLayout {
     Splith,
     Splitv,
     Stacked,
     Tabbed,
     Output,
+    /// This is undocumented, but I've seen a layout be none
+    None,
 }
 #[derive(Clone, Copy, Deserialize_repr, PartialEq, Eq, Hash)]
 #[serde(untagged)]
 #[repr(u32)]
+#[derive(Debug)]
 pub enum SwayFullscreenMode {
     None = 0u32,
     Workspace = 1u32,
@@ -79,12 +84,14 @@ pub enum SwayFullscreenMode {
 }
 #[derive(Clone, Copy, Deserialize, PartialEq, Eq, Hash)]
 #[serde(rename_all = "lowercase")]
+#[derive(Debug)]
 pub enum IdleInhibitorApplication {
     Enabled,
     None,
 }
 #[derive(Clone, Copy, Deserialize, PartialEq, Eq, Hash)]
 #[serde(rename_all = "lowercase")]
+#[derive(Debug)]
 pub enum IdleInhibitorUser {
     Focus,
     Fullscreen,
@@ -93,18 +100,19 @@ pub enum IdleInhibitorUser {
     None,
 }
 
-#[derive(Clone, Copy, Deserialize, PartialEq, Eq, Hash)]
+#[derive(Clone, Copy, Deserialize, PartialEq, Eq, Hash, Debug)]
 pub struct IdleInhibitors {
     application: IdleInhibitorApplication,
     user: IdleInhibitorUser,
 }
 #[derive(Clone, Copy, Deserialize, PartialEq, Eq, Hash)]
 #[serde(rename_all = "lowercase")]
+#[derive(Debug)]
 pub enum SwayBarPosition {
     Bottom,
     Top,
 }
-#[derive(Clone, Copy, Deserialize, PartialEq, Eq, Hash)]
+#[derive(Clone, Copy, Deserialize, PartialEq, Eq, Hash, Debug)]
 #[serde(rename_all = "lowercase")]
 pub enum SwayBarMode {
     Dock,
@@ -113,12 +121,13 @@ pub enum SwayBarMode {
 }
 #[derive(Clone, Copy, Deserialize, PartialEq, Eq, Hash)]
 #[serde(rename_all = "lowercase")]
+#[derive(Debug)]
 pub enum Orientation {
     Vertical,
     Horizontal,
     None,
 }
-#[derive(Deserialize, Clone, PartialEq, Eq, Hash)]
+#[derive(Deserialize, Clone, PartialEq, Eq, Hash, Debug)]
 pub struct Gaps {
     top: u64,
     right: u64,
@@ -161,7 +170,7 @@ pub mod sway_message_type {
     pub const GET_SEATS: u32 = 101u32;
 }
 
-#[derive(Clone, Copy, Deserialize, PartialEq, Eq, Hash)]
+#[derive(Clone, Copy, Deserialize, PartialEq, Eq, Hash, Debug)]
 #[serde(rename_all = "lowercase")]
 #[serde(untagged)]
 pub enum SubpixelHinting {
@@ -172,7 +181,7 @@ pub enum SubpixelHinting {
     None,
 }
 
-#[derive(Clone, Copy, Deserialize, PartialEq, Eq, Hash)]
+#[derive(Clone, Copy, Deserialize, PartialEq, Eq, Hash, Debug)]
 #[serde(untagged)]
 pub enum Transform {
     #[serde(rename = "normal")]
@@ -191,7 +200,7 @@ pub enum Transform {
     Flipped270,
 }
 
-#[derive(Clone, Copy, Deserialize, PartialEq, Eq, Hash)]
+#[derive(Clone, Copy, Deserialize, PartialEq, Eq, Hash, Debug)]
 pub struct OutputMode {
     pub(crate) width: u64,
     pub(crate) height: u64,
